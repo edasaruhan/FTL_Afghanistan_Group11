@@ -5,8 +5,8 @@ import numpy as np
 import requests
 
 # Load the pre-trained model and scaler
-model = joblib.load("random_forest_model.joblib")
-scaler = joblib.load("scaler.joblib")
+model = joblib.load("flood_prediction_model.pkl")
+scaler = joblib.load("flood_prediction_scaler.pkl")
 
 # Initialize FastAPI app
 app = FastAPI()
