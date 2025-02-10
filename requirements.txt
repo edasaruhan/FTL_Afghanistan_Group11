@@ -5,3 +5,5 @@ pydantic
 fastapi
 uvicorn
 scikit-learn
+jinja2
+
