@@ -3,35 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flood Prediction</title>
+    <title>Flood Prediction in Afghanistan</title>
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-    <h1>Flood Prediction System</h1>
-    <form id="predictionForm">
-        <label for="location">Select a Location:</label>
-        <select id="location" name="location">
-            {% for loc in locations.keys() %}
-                <option value="{{ loc }}">{{ loc }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Predict</button>
-    </form>
-    <div id="result"></div>
+
+    <header style="text-align: center;">
+        <img src="/static/flood01.jpeg" alt="Flood in Afghanistan">
+        <h1>🌊 Flood Prediction System</h1>
+        <p>Providing real-time flood risk assessment for Afghanistan</p>
+    </header>
+
+    <main style="text-align: center;">
+        <div class="form-container">
+            <h2>Select a Location</h2>
+            <form id="predictionForm">
+                <label for="location">Choose a Location:</label>
+                <select id="location" name="location">
+                    {% for loc in locations.keys() %}
+                        <option value="{{ loc }}">{{ loc }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Predict Flood Risk</button>
+            </form>
+        </div>
+
+        <section id="result-section">
+            <h2>Prediction Result</h2>
+            <div id="result"></div>
+        </section>
+    </main>
+
+    <footer style="text-align: center;">
+        <p>&copy; 2025 Flood Prediction System | Developed for Afghanistan</p>
+    </footer>
 
     <script>
         document.getElementById('predictionForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             const location = document.getElementById('location').value;
-            const formData = new FormData();
+
+            const formData = new URLSearchParams();
             formData.append("location", location);
 
-            const response = await fetch("/predict", {
+            const response = await fetch("/predict_from_location", {
                 method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: formData
             });
 
             const data = await response.json();
-            document.getElementById('result').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            document.getElementById('result').innerHTML = `
+            <div class="result-container">
+                <h2>Location: ${location}</h2>
+                <div class="data-box">
+                <p><strong>Latitude:</strong> ${data.lat}</p>
+                <p><strong>Longitude:</strong> ${data.lon}</p>
+                <p><strong>River Discharge:</strong> ${data.weather_data.river_discharge}</p>
+                <p><strong>Precipitation:</strong> ${data.weather_data.precipitation}</p>
+                <p><strong>Water Height:</strong> ${data.weather_data.water_height}</p>
+                <p class="prediction"><strong>Prediction:</strong> ${data.prediction}</p>
+                </div>
+            </div>
+            `;
         });
     </script>
 </body>
