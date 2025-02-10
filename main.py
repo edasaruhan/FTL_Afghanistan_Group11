@@ -3,6 +3,19 @@ from pydantic import BaseModel
 import joblib
 import numpy as np
 import requests
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.requests import Request
+from fastapi import FastAPI, HTTPException, Form
+import json
+
+
+# Mount the templates and static files
+app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+
 
 # Load the pre-trained model and scaler
 model = joblib.load("flood_prediction_model.pkl")
@@ -169,4 +182,49 @@ def predict(data: LocationInput):
             "water_height": water_height
         },
         "prediction": prediction.tolist()
+    }
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request, "locations": locations})
+
+@app.post("/predict")
+def predict(location: str = Form(...)):
+    if location not in locations:
+        raise HTTPException(status_code=404, detail="Location not found")
+    
+    lat, lon = locations[location]["lat"], locations[location]["lon"]
+    api_urls = {
+        "precipitation": f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=precipitation&timezone=auto",
+        "soil_moisture": f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=soil_moisture_0_to_1cm&timezone=auto",
+        "river_discharge": f"https://flood-api.open-meteo.com/v1/flood?latitude={lat}&longitude={lon}&daily=river_discharge&forecast_days=1&timezone=auto"
+    }
+   def fetch_data(url):
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            raise HTTPException(status_code=500, detail=f"Failed to fetch data: {str(e)}")
+    
+    try:
+        precipitation = fetch_data(api_urls["precipitation"])['current']['precipitation']
+        soil_moisture = fetch_data(api_urls["soil_moisture"])['hourly']['soil_moisture_0_to_1cm'][0]
+        river_discharge = fetch_data(api_urls["river_discharge"])['daily']['river_discharge'][0]
+    except KeyError as e:
+        raise HTTPException(status_code=500, detail=f"Missing data in response: {str(e)}")
+    
+    water_height = 0.1 * (river_discharge ** 0.5) + 0.3 * soil_moisture + 0.2 * precipitation
+    
+    return {
+        "location": location,
+        "lat": lat,
+        "lon": lon,
+        "weather_data": {
+            "precipitation": precipitation,
+            "soil_moisture": soil_moisture,
+            "river_discharge": river_discharge,
+            "water_height": water_height
+        },
+        "prediction": "Flood risk calculated"
     }
