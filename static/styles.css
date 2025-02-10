@@ -1,0 +1,121 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url("/static/flood02.avif") no-repeat center center fixed;
+    background-size: cover;
+    text-align: center;
+    color: white;
+}
+
+/* Header Styles */
+header {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    text-align: center;
+}
+
+header img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin: 10px 0;
+}
+
+header p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+/* Form Section */
+.form-container {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    margin: 50px auto;
+    text-align: center;
+    width: 40%;
+    color: black;
+}
+
+select, button {
+    padding: 10px;
+    margin: 10px;
+    font-size: 1em;
+    width: 80%;
+}
+
+button {
+    background: #0a9396;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #005f73;
+}
+
+/* Result Section */
+#result-section {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    margin: 20px auto;
+    text-align: left;
+    width: 40%;
+    color: black;
+}
+
+/* Footer */
+footer {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.result-container {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin: 20px auto;
+  }
+  
+  h2 {
+    color: #2c3e50;
+    text-align: center;
+  }
+  
+  .data-box {
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  p {
+    margin: 8px 0;
+    font-size: 16px;
+  }
+  
+  .prediction {
+    font-size: 18px;
+    font-weight: bold;
+    color: #e74c3c;
+  }
+  
