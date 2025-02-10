@@ -188,34 +188,42 @@ def predict(data: LocationInput):
 def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "locations": locations})
 
-@app.post("/predict")
+
+def fetch_data(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch data: {str(e)}")
+    
+
+@app.post("/predict_from_location")
 def predict(location: str = Form(...)):
     if location not in locations:
         raise HTTPException(status_code=404, detail="Location not found")
-    
+
     lat, lon = locations[location]["lat"], locations[location]["lon"]
     api_urls = {
         "precipitation": f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=precipitation&timezone=auto",
         "soil_moisture": f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=soil_moisture_0_to_1cm&timezone=auto",
         "river_discharge": f"https://flood-api.open-meteo.com/v1/flood?latitude={lat}&longitude={lon}&daily=river_discharge&forecast_days=1&timezone=auto"
     }
-   def fetch_data(url):
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-            return response.json()
-        except requests.exceptions.RequestException as e:
-            raise HTTPException(status_code=500, detail=f"Failed to fetch data: {str(e)}")
-    
+
     try:
         precipitation = fetch_data(api_urls["precipitation"])['current']['precipitation']
         soil_moisture = fetch_data(api_urls["soil_moisture"])['hourly']['soil_moisture_0_to_1cm'][0]
         river_discharge = fetch_data(api_urls["river_discharge"])['daily']['river_discharge'][0]
     except KeyError as e:
         raise HTTPException(status_code=500, detail=f"Missing data in response: {str(e)}")
-    
+
     water_height = 0.1 * (river_discharge ** 0.5) + 0.3 * soil_moisture + 0.2 * precipitation
-    
+    input_features = np.array([precipitation, soil_moisture, river_discharge, water_height]).reshape(1, -1)
+
+    # Step 4: Scale Input and Predict
+    scaled_features = scaler.transform(input_features)
+    prediction = model.predict(scaled_features)
+
     return {
         "location": location,
         "lat": lat,
@@ -226,5 +234,5 @@ def predict(location: str = Form(...)):
             "river_discharge": river_discharge,
             "water_height": water_height
         },
-        "prediction": "Flood risk calculated"
+        "prediction": prediction.tolist()
     }
