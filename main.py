@@ -184,11 +184,18 @@ def predict(data: LocationInput):
         "prediction": prediction.tolist()
     }
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
 def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "locations": locations})
 
 
+@app.get("/about", response_class=HTMLResponse, include_in_schema=False)
+async def about(request: Request):
+    return templates.TemplateResponse("about.html", {"request": request})
+
+@app.get("/model", response_class=HTMLResponse, include_in_schema=False)
+async def about(request: Request):
+    return templates.TemplateResponse("model.html", {"request": request})
 def fetch_data(url):
     try:
         response = requests.get(url)
@@ -198,7 +205,7 @@ def fetch_data(url):
         raise HTTPException(status_code=500, detail=f"Failed to fetch data: {str(e)}")
     
 
-@app.post("/predict_from_location")
+@app.post("/predict_from_location", include_in_schema=False)
 def predict(location: str = Form(...)):
     if location not in locations:
         raise HTTPException(status_code=404, detail="Location not found")
