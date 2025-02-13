@@ -4,69 +4,201 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flood Prediction in Afghanistan</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            background: url('https://open-meteo.com/images/convective_clouds.webp') no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(8px);
+            z-index: -1;
+        }
+        .nav-item {
+            margin-left: 20px;
+        }
+        .card-body {
+            background-color: #f8f9fa; /* Light background color */
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .card-title {
+            color: #007bff; /* Blue color for title */
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .card i {
+            color: #007bff; /* Blue color for icons */
+            margin-right: 8px;
+        }
+
+        .text-danger {
+            color: #e74c3c !important; /* Red for prediction text */
+        }
+
+        .fw-bold {
+            font-weight: bold;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #ffffff;
+        }
+
+        /* Improved header color */
+        header {
+            background: rgba(27, 40, 55, 0.8); /* Semi-transparent blue */
+            color: white;
+        }
+
+        /* Adjusting footer position and spacing */
+        footer {
+            background: rgba(27, 40, 55, 0.8); /* Semi-transparent blue */
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 15px 0;
+        }
+
+        /* Section spacing and card adjustments */
+        section {
+            margin-bottom: 40px;
+        }
+
+        #about-floods {
+            background-color: #6c757d;
+            padding: 40px 20px;
+            border-radius: 10px;
+            color: white;
+            position: relative;
+            bottom: 0;
+        }
+
+        #result {
+            display: none; /* Keep hidden initially */
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
-    <header style="text-align: center;">
-        <img src="/static/flood01.jpeg" alt="Flood in Afghanistan">
-        <h1>🌊 Flood Prediction System</h1>
-        <p>Providing real-time flood risk assessment for Afghanistan</p>
+    <header class="d-flex justify-content-between align-items-center py-4 px-5">
+        <!-- Logo and Name Section -->
+        <div class="d-flex align-items-center">
+            <h1 class="mb-0">🌊 Flood Prediction System</h1>
+        </div>
+    
+        <!-- Navbar Section -->
+        <nav>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/model">Model</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/docs" target="_blank">API</a>
+                </li>
+            </ul>
+        </nav>
     </header>
 
-    <main style="text-align: center;">
-        <div class="form-container">
-            <h2>Select a Location</h2>
-            <form id="predictionForm">
-                <label for="location">Choose a Location:</label>
-                <select id="location" name="location">
-                    {% for loc in locations.keys() %}
-                        <option value="{{ loc }}">{{ loc }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit">Predict Flood Risk</button>
-            </form>
+    <main class="container my-5">
+        <div class="row">
+            <!-- Left Column: Location Selection & Prediction Result -->
+            <div class="col-md-7">
+                <section class="mb-4 text-center">
+                    <h2 class="mb-3">Select a Location</h2>
+                    <form id="predictionForm" class="d-flex justify-content-center gap-2">
+                        <select id="location" name="location" class="form-select w-auto">
+                            {% for loc in locations.keys() %}
+                                <option value="{{ loc }}">{{ loc }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-primary">Predict Flood Risk</button>
+                    </form>
+                </section>
+    
+                <section id="result-section" class="mt-4">
+                    <h2 class="text-center">Prediction Result</h2>
+                    <div id="result" class="border p-4 rounded bg-light" style="display: none;"></div>
+                </section>
+            </div>
+    
+            <!-- Right Column: About Flooding -->
+            <div class="col-md-5">
+                <section id="about-floods" class="p-5 border rounded">
+                    <h2 class="text-center">Flooding in Afghanistan</h2>
+                    <p>
+                        Afghanistan is highly vulnerable to natural disasters, with flooding being a common threat. 
+                        Heavy rainfall and rapid snowmelt frequently cause rivers to overflow, impacting communities, 
+                        agriculture, and infrastructure. The country’s mountainous terrain exacerbates flash floods, 
+                        which can result in loss of life and displacement of families.
+                    </p>
+                    <p>
+                        Flood prediction systems are crucial for early warning and disaster preparedness, 
+                        enabling authorities to take proactive measures to protect lives and property.
+                    </p>
+                </section>
+            </div>
         </div>
-
-        <section id="result-section">
-            <h2>Prediction Result</h2>
-            <div id="result"></div>
-        </section>
     </main>
+    
 
-    <footer style="text-align: center;">
+    <footer class="text-center py-3">
         <p>&copy; 2025 Flood Prediction System | Developed for Afghanistan</p>
     </footer>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- For Font Awesome icons -->
 
     <script>
         document.getElementById('predictionForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             const location = document.getElementById('location').value;
-
             const formData = new URLSearchParams();
             formData.append("location", location);
-
+    
             const response = await fetch("/predict_from_location", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: formData
             });
-
+    
             const data = await response.json();
-            document.getElementById('result').innerHTML = `
-            <div class="result-container">
-                <h2>Location: ${location}</h2>
-                <div class="data-box">
-                <p><strong>Latitude:</strong> ${data.lat}</p>
-                <p><strong>Longitude:</strong> ${data.lon}</p>
-                <p><strong>River Discharge:</strong> ${data.weather_data.river_discharge}</p>
-                <p><strong>Precipitation:</strong> ${data.weather_data.precipitation}</p>
-                <p><strong>Water Height:</strong> ${data.weather_data.water_height}</p>
-                <p class="prediction"><strong>Prediction:</strong> ${data.prediction}</p>
-                </div>
-            </div>
-            `;
+            const resultCard = document.getElementById('result');
+            resultCard.style.display = 'block'; // Show the result card
+    
+            resultCard.innerHTML = `
+                <div class="card shadow-lg border-light mb-4" style="max-width: 600px; margin: auto;">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-map-marker-alt"></i> Location: ${location}</h5>
+                        <p><i class="fas fa-compass"></i> <strong>Latitude:</strong> ${data.lat}</p>
+                        <p><i class="fas fa-compass"></i> <strong>Longitude:</strong> ${data.lon}</p>
+                        <p><i class="fas fa-water"></i> <strong>River Discharge:</strong> ${data.weather_data.river_discharge}</p>
+                        <p><i class="fas fa-cloud-rain"></i> <strong>Precipitation:</strong> ${data.weather_data.precipitation}</p>
+                        <p><i class="fas fa-tint"></i> <strong>Water Height:</strong> ${data.weather_data.water_height}</p>
+                        <p class="fw-bold text-danger"><i class="fas fa-exclamation-circle"></i> Prediction: ${data.prediction}</p>
+                    </div>
+                </div>`;
         });
     </script>
+
 </body>
 </html>

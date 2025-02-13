@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood Prediction in Afghanistan</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            filter: blur(8px);
+            z-index: -1;
+        }
+        .nav-item {
+            margin-left: 20px;
+        }
+        .card-body {
+            background-color: #f8f9fa; /* Light background color */
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .how-it-works .step {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.how-it-works .step i {
+    font-size: 2rem;
+    color: #007bff;
+    margin-right: 15px;
+}
+
+.how-it-works .step h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.how-it-works .step {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.how-it-works .step i {
+    font-size: 2rem;
+    color: #007bff;
+    margin-right: 15px;
+}
+
+.how-it-works .step h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.technologies .tech {
+    margin-bottom: 20px;
+}
+
+.technologies h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #343a40;
+}
+
+.impact .cta {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.impact .cta .btn {
+    font-size: 1.2rem;
+    padding: 10px 20px;
+}
+
+
+        .card-title {
+            color: #007bff; /* Blue color for title */
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .card i {
+            color: #007bff; /* Blue color for icons */
+            margin-right: 8px;
+        }
+
+        .text-danger {
+            color: #e74c3c !important; /* Red for prediction text */
+        }
+
+        .fw-bold {
+            font-weight: bold;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #ffffff;
+        }
+
+        /* Improved header color */
+        header {
+            background: rgba(27, 40, 55, 0.8); /* Semi-transparent blue */
+            color: white;
+        }
+
+        /* Adjusting footer position and spacing */
+        footer {
+            background: rgba(27, 40, 55, 0.8); /* Semi-transparent blue */
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 15px 0;
+        }
+        .card-img-top {
+            height: 220px;
+        }
+
+        /* Section spacing and card adjustments */
+        section {
+            margin-bottom: 40px;
+        }
+
+        #about-floods {
+            background-color: #6c757d;
+            padding: 40px 20px;
+            border-radius: 10px;
+            color: white;
+            position: relative;
+            bottom: 0;
+        }
+
+        #result {
+            display: none; /* Keep hidden initially */
+        }
+    </style>
+</head>
+<body>
+    <header class="d-flex justify-content-between align-items-center py-4 px-5">
+        <!-- Logo and Name Section -->
+        <div class="d-flex align-items-center">
+            <h1 class="mb-0">🌊 Flood Prediction System</h1>
+        </div>
+    
+        <!-- Navbar Section -->
+        <nav>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/model">Model</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/docs" target="_blank">API</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <section id="about" class="mb-5">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2 class="display-4  fw-bold">About Flood Prediction</h2>
+                    <p class="lead">Afghanistan is highly vulnerable to natural disasters, with flooding being a frequent and destructive threat. Heavy rainfall and rapid snowmelt often cause rivers to overflow, impacting communities, agriculture, and infrastructure. The country’s mountainous terrain exacerbates flash floods, which can result in loss of life and displacement.</p>
+                    <p>Our Flood Prediction System leverages machine learning and advanced analytics to predict flood risks, enabling better preparedness and mitigation efforts to protect lives and property.</p>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://floodlist.com/wp-content/uploads/2022/08/Floods-in-Parwan-Province-Afghanistan-13-August-2022-Afghan-Red-Crescent-768x576.jpeg" class="img-fluid rounded shadow-lg" alt="Flood Prediction">
+                </div>
+            </div>
+        </section>
+    
+        <section id="model" class="mb-5 bg-light py-5 rounded">
+            <div class="container">
+                <h2 class="display-4 text-center fw-bold mb-4">How the Model Works</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow border-0 rounded">
+                            <img src="https://ffind.com/app/uploads/2021/07/Data-collection-in-quantitative-research-4-1280x0-c-default.webp" class="card-img-top" alt="Data Collection">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Data Collection</h5>
+                                <p class="card-text">We gather real-time weather data, river discharge levels, and terrain information to feed into the model, ensuring accurate predictions.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow border-0 rounded">
+                            <img src="https://www.informatec.com/sites/default/files/styles/medium/public/image-seperator/machine-learning-separator-1.jpg?itok=ycRLJQV9" class="card-img-top" alt="Machine Learning">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Machine Learning</h5>
+                                <p class="card-text">Advanced machine learning algorithms are used to analyze patterns in the data and predict flood risks based on historical trends and current conditions.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow border-0 rounded">
+                            <img src="https://media.istockphoto.com/id/1382100077/de/vektor/gl%C3%BCcklich-mit-gesch%C3%A4ftsergebnissen.jpg?s=612x612&w=0&k=20&c=VMdaPsxY3uNRqrl7QOJT7HiXfQo7aZtgRbZShfw77JQ=" class="card-img-top" alt="Prediction Output">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Prediction Output</h5>
+                                <p class="card-text">The model generates accurate flood risk predictions, enabling authorities and communities to prepare and respond proactively.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+    </main>    
+
+    <footer class="text-center py-3">
+        <p>&copy; 2025 Flood Prediction System | Developed for Afghanistan</p>
+    </footer>
+</body>
+</html>

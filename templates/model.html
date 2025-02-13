@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood Prediction Model</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            filter: blur(8px);
+            z-index: -1;
+        }
+        .card-body {
+            background-color: #f8f9fa; /* Light background color */
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .card-title {
+            color: #007bff; /* Blue color for title */
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .card i {
+            color: #007bff; /* Blue color for icons */
+            margin-right: 8px;
+        }
+
+        .text-danger {
+            color: #e74c3c !important; /* Red for prediction text */
+        }
+
+        .fw-bold {
+            font-weight: bold;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #ffffff;
+        }
+
+        header {
+            background: rgba(27, 40, 55, 0.8); /* Semi-transparent blue */
+            color: white;
+        }
+
+        footer {
+            background: rgba(27, 40, 55, 0.8); /* Semi-transparent blue */
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 15px 0;
+        }
+
+        /* Section spacing and card adjustments */
+        section {
+            margin-bottom: 40px;
+        }
+
+        #result {
+            display: none; /* Keep hidden initially */
+        }
+    </style>
+</head>
+<body>
+    <header class="d-flex justify-content-between align-items-center py-4 px-5">
+        <!-- Logo and Name Section -->
+        <div class="d-flex align-items-center">
+            <h1 class="mb-0">🌊 Flood Prediction Model</h1>
+        </div>
+    
+        <!-- Navbar Section -->
+        <nav>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/model">Model</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/docs" target="_blank">API</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <section id="model-description" class="mb-5">
+            <h2 class="display-4 fw-bold">Flood Prediction Model</h2>
+            <p class="lead">Our flood prediction model relies on real-time weather data to predict flood risks. This data includes four critical parameters: precipitation, soil moisture, river discharge, and water height. These parameters are gathered from the Open-Meteo API for specific locations based on their latitude and longitude.</p>
+        </section>
+
+        <section id="parameters" class="mb-5">
+            <h3 class="fw-bold mb-4">Key Parameters Used in the Model</h3>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow border-0 rounded">
+                        <div class="card-body">
+                            <h5 class="card-title">Precipitation</h5>
+                            <p class="card-text">Precipitation refers to any form of water, such as rain, snow, sleet, or hail, that falls from the atmosphere. It is a crucial parameter as heavy rainfall increases the risk of flooding, especially when drainage systems are overwhelmed.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow border-0 rounded">
+                        <div class="card-body">
+                            <h5 class="card-title">Soil Moisture</h5>
+                            <p class="card-text">Soil moisture is the amount of water in the soil, which influences how much water can be absorbed by the ground. When soil moisture is high, the likelihood of surface runoff increases, contributing to flooding.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow border-0 rounded">
+                        <div class="card-body">
+                            <h5 class="card-title">River Discharge</h5>
+                            <p class="card-text">River discharge measures the flow of water in rivers and streams. It indicates how much water is moving through a river system, and high discharge levels can lead to riverbank overflow and subsequent flooding.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow border-0 rounded">
+                        <div class="card-body">
+                            <h5 class="card-title">Water Height</h5>
+                            <p class="card-text">Water height refers to the level of water in rivers, lakes, or reservoirs. Increased water height can result from heavy rainfall, snowmelt, or rising river discharge, all of which can lead to flooding in surrounding areas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="data-source" class="mb-5 bg-light py-5 rounded">
+            <h3 class="display-4 fw-bold mb-4">Data Source: Open-Meteo</h3>
+            <p>The data for these parameters is obtained from the <a href="https://open-meteo.com/" target="_blank" class="fw-bold text-decoration-none">Open-Meteo API</a>, which provides accurate, real-time weather data for locations worldwide. By inputting the latitude and longitude of a given location, the API provides current and historical data on precipitation, soil moisture, river discharge, and water height.</p>
+            <p>This allows our flood prediction system to make accurate forecasts based on up-to-date information, ensuring that authorities and communities are better prepared for potential flooding events.</p>
+        </section>
+
+        <section id="prediction" class="mb-5">
+            <h3 class="display-4 fw-bold mb-4">Flood Prediction Process</h3>
+            <p>Once the data for these four parameters is gathered from Open-Meteo, we use machine learning algorithms to analyze the data. The system predicts the likelihood of flooding in specific areas based on real-time conditions and historical trends. The results are then presented in the form of a flood risk prediction, helping authorities take proactive measures to mitigate potential damage.</p>
+        </section>
+    
+    </main>
+
+    <footer class="text-center py-3">
+        <p>&copy; 2025 Flood Prediction System | Developed for Afghanistan</p>
+    </footer>
+</body>
+</html>
