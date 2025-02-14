@@ -123,7 +123,7 @@
     <main class="container my-5">
         <div class="row">
             <!-- Left Column: Location Selection & Prediction Result -->
-            <div class="col-md-7">
+            <div class="col-md-12">
                 <section class="mb-4 text-center">
                     <h2 class="mb-3">Select a Location</h2>
                     <form id="predictionForm" class="d-flex justify-content-center gap-2">
@@ -143,9 +143,11 @@
             </div>
     
             <!-- Right Column: About Flooding -->
-            <div class="col-md-5">
+            <div class="container">
                 <section id="about-floods" class="p-5 border rounded">
-                    <h2 class="text-center">Flooding in Afghanistan</h2>
+                    <h2>Flooding in Afghanistan</h2>
+                    <div class="row">
+                        <div class="col-md-6">
                     <p>
                         Afghanistan is highly vulnerable to natural disasters, with flooding being a common threat. 
                         Heavy rainfall and rapid snowmelt frequently cause rivers to overflow, impacting communities, 
@@ -156,6 +158,11 @@
                         Flood prediction systems are crucial for early warning and disaster preparedness, 
                         enabling authorities to take proactive measures to protect lives and property.
                     </p>
+                </div>
+                <div class="col-md-6">
+                    <img src="https://e3.365dm.com/24/05/2048x1152/skynews-afghanistan-baghlan_6550489.jpg" class="img-fluid rounded shadow-lg" alt="Floods in Afghanistan">
+                </div>
+                </div>
                 </section>
             </div>
         </div>
@@ -192,6 +199,7 @@
                         <p><i class="fas fa-compass"></i> <strong>Latitude:</strong> ${data.lat}</p>
                         <p><i class="fas fa-compass"></i> <strong>Longitude:</strong> ${data.lon}</p>
                         <p><i class="fas fa-water"></i> <strong>River Discharge:</strong> ${data.weather_data.river_discharge}</p>
+                        <p><i class="fas fa-water"></i> <strong>Soil Moisture:</strong> ${data.weather_data.soil_moisture}</p>
                         <p><i class="fas fa-cloud-rain"></i> <strong>Precipitation:</strong> ${data.weather_data.precipitation}</p>
                         <p><i class="fas fa-tint"></i> <strong>Water Height:</strong> ${data.weather_data.water_height}</p>
                         <p class="fw-bold text-danger"><i class="fas fa-exclamation-circle"></i> Prediction: ${data.prediction}</p>
